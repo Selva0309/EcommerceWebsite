@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecommerce website</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+       
+</head>
+<body>
+<div id="full-container">
+    <div class="navbar">
+        <ul class="headeritems">
+            <li><a href="/home.html">Home</a></li>
+            <li><a href="#">Store</a></li>
+            <li><a href="/about-us.html">About us</a></li>
+            <a href="#" id="cart"class="btn"type="button">Cart<span class="no-of-items">0</span></a>
+        </ul>
+    </div>       
+    
+    
+    <div class ='website'>
+        <h1>The Generics</h1>
+    </div>
+        <div class="music">
+            <h1>Music</h1>
+            <!-- <div class="card" id="Album1">
+                <h2>Album 1</h2>
+                <div class="image-container">
+                    <img class="prod-images" src="https://images.pexels.com/photos/1389429/pexels-photo-1389429.jpeg?auto=compress&cs=tinysrgb&w=600" alt="album1" />
+                </div>
+                <div class = "details">
+                    <h3><span>$</span><span class='item-amount'>12.99</span></h3>
+                    <button class="add-cart-btn" type="button">Add to cart</button>
+                </div>
+            </div>
+
+            <div class="card" id="Album2">
+                <h2>Album 2</h2>
+                <div class="image-container">
+                    <img class="prod-images"src="https://images.pexels.com/photos/159376/turntable-top-view-audio-equipment-159376.jpeg?auto=compress&cs=tinysrgb&w=600" alt="album2" />
+                </div>
+                <div class = "details">
+                    <h3><span>$</span><span class='item-amount'>14.99</span></h3>
+                    <button class="add-cart-btn" type="button">Add to cart</button>
+                </div>
+            </div>
+
+            <div class="card" id="Album3">
+                <h2>Album 3</h2>
+                <div class="image-container">
+                    <img class="prod-images"src="https://images.pexels.com/photos/1490844/pexels-photo-1490844.jpeg?auto=compress&cs=tinysrgb&w=600" alt="album3" />
+                </div>
+                <div class = "details">
+                    <h3><span>$</span><span class='item-amount'>9.99</span></h3>
+                    <button class="add-cart-btn" type="button">Add to cart</button>
+                </div>
+            </div>
+
+            <div class="card" id="Album4">
+                <h2>Album 4</h2>
+                <div class="image-container">
+                <img class="prod-images"src="https://images.pexels.com/photos/1021876/pexels-photo-1021876.jpeg?auto=compress&cs=tinysrgb&w=600" alt="album4" />
+                </div>
+                <div class = "details">
+                    <h3><span>$</span><span class='item-amount'>14.99</span></h3>
+                    <button class="add-cart-btn" type="button">Add to cart</button>
+                </div>
+            </div>
+
+            
+        </div>
+        <div class="merch">
+            <h1>Merch</h1>
+            <div class="card" id="tshirt">
+                <h2>Tshirt</h2>
+                <div class="image-container">
+                    <img class="prod-images"src="https://images.pexels.com/photos/1561011/pexels-photo-1561011.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Tshirt" />
+                </div>
+                <div class = "details">
+                    <h3><span>$</span><span class='item-amount'>19.99</span></h3>
+                    <button class="add-cart-btn" type="button">Add to cart</button>
+                </div>
+            </div>
+        
+                <div class="card" id="coffeecup">
+                    <h2>coffee cup</h2>
+                    <div class="image-container">
+                        <img class="prod-images"src="https://images.pexels.com/photos/1187317/pexels-photo-1187317.jpeg?auto=compress&cs=tinysrgb&w=600" alt="coffeecup" />
+                    </div>
+                    <div class = "details">
+                        <h3><span>$</span><span class='item-amount'>6.99</span></h3>
+                        <button class="add-cart-btn" type="button">Add to cart</button>
+                    </div>
+                </div> -->
+            </div>
+    
+    <section class="cart-container">
+        <button class="close">X</button>
+        <h1>Cart</h1>
+        <div class="cart-items-header">
+            <span class="item-name">ITEM</span>
+            <span class="item-price">PRICE</span>
+            <span class="item-quantiy">QUANTIY</span>
+        </div>
+        <div class="cart-items" id="cart-items">
+
+        </div>
+        <button class="btn" id="purchase">Purchase</button>
+        <span class="total">TOTAL<span>$<span class="total-amount">0</span></span></span>
+    </section>
+    <section class="notification-container">
+
+    </section>
+    <div class="endbtn">
+            <button class="btn"type="button"id="cart">See the cart</button>
+    </div>
+
+</div>
+    
+    <div class = 'navbar'>
+        <ul class="footeritems">
+            <div class="container">
+                <li><h2>The Generics</h2></li>
+            </div>
+            <div class="media">
+                <li><a href="#" class="fa fa-facebook"></a></li>
+                <li><a href="#" class="fa fa-twitter"></a></li>
+                <li><a href="#" class="fa fa-youtube"></a></li>
+            </div>
+        </ul>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js" integrity="sha512-zJYu9ICC+mWF3+dJ4QC34N9RA0OVS1XtPbnf6oXlvGrLGNB8egsEzu/5wgG90I61hOOKvcywoLzwNmPqGAdATA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="script.js"></script>
+
+</html>
