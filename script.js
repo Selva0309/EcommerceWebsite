@@ -88,6 +88,7 @@ var cartItemsList = [];
 window.addEventListener('DOMContentLoaded',()=>{
     axios.get('http://localhost:3000/products').then((response)=>{
         // console.log(response.data.products);
+        
         let products = response.data.products;
         products.forEach(product => {
             const id = product.id;
@@ -112,17 +113,31 @@ window.addEventListener('DOMContentLoaded',()=>{
             musicContainer.appendChild(productItem);
         });
     })
-})
+    
+    
+    })
+    
+
 
 function addToCart(id) {
 
     axios.post('http://localhost:3000/cart', {productId: id})
     .then(response =>{
-        document.querySelector(".no-of-items").innerText = parseInt(document.querySelector(".no-of-items").innerText) + 1;
-        const container = document.querySelector('.notification-container');
+        if(response.status === 200){
+        notifyUser(response.data.message);
+        showcart();
+        // console.log(response.data.item);    
+        } else {throw new Error(response.data.message)};
+        }).catch(errmsg=>{
+        notifyUser(errmsg);
+    })
+}
+
+function notifyUser(message) {
+    const container = document.querySelector('.notification-container');
         const notification = document.createElement('div');
             notification.innerHTML=`
-            <h4>Your product successfully added to Cart </h4>
+            <h4>${message} </h4>
             `;
             container.appendChild(notification);
             container.style = 'display: block;'
@@ -130,6 +145,46 @@ function addToCart(id) {
                 notification.remove();
                 container.style = 'display: none;'
             },2500)
-    })
 }
 
+function showcart(){
+    axios.get('http://localhost:3000/cart').then(response=>{
+        let products = response.data.products;
+        cartItems.innerHTML="";
+        document.querySelector('.total-amount').innerText = 0;                                                                                                                                                                                                              
+        console.log(products)
+        products.forEach(product=>{
+        const id = product.id;
+        const title = product.title;
+        const price = product.price;
+        const img_link = product.imageUrl;
+        const quantity = product.cartItem.quantity;
+        total_price = document.querySelector('.total-amount').innerText;
+        cartItem = document.createElement('div');
+        cartItem.classList.add("cart-item-row");
+            cartItem.setAttribute('id',`in-cart-${id}`);
+            document.querySelector('.total-amount').innerText = (parseFloat(total_price)+(price*quantity)).toFixed(2);
+    
+            cartItem.innerHTML= `
+            <div class="image-icon">
+                <img src="${img_link}">
+                <span class="item-name"><h3>${title}</h3></span>
+                
+            </div>    
+            <span>$</span><span class="item-price">
+            ${price}</span>
+            <span class="item-quantity">${quantity}</span>
+            <button id="remove" class="remove-btn">REMOVE</button>
+            `;
+            cartItems.appendChild(cartItem);
+ 
+    })
+      
+    document.querySelector(".no-of-items").innerText = products.length;
+})
+document.querySelector('.cart-container').style = "display:flex; transform: translateX(-100%);" ;
+}
+
+function closecart(){
+    document.querySelector('.cart-container').style = "display:flex; transform: translateX(0);"
+}

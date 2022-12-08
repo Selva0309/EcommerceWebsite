@@ -16,7 +16,7 @@
             <li><a href="/home.html">Home</a></li>
             <li><a href="#">Store</a></li>
             <li><a href="/about-us.html">About us</a></li>
-            <a href="#" id="cart"class="btn"type="button">Cart<span class="no-of-items">0</span></a>
+            <a href="#" id="cart"class="btn"type="button" onclick="showcart()">Cart<span class="no-of-items">0</span></a>
         </ul>
     </div>       
     
@@ -98,7 +98,7 @@
             </div>
     
     <section class="cart-container">
-        <button class="close">X</button>
+        <button onclick='closecart()' class="close">X</button>
         <h1>Cart</h1>
         <div class="cart-items-header">
             <span class="item-name">ITEM</span>
@@ -115,7 +115,7 @@
 
     </section>
     <div class="endbtn">
-            <button class="btn"type="button"id="cart">See the cart</button>
+            <button onclick='showcart()' class="btn"type="button"id="cart">See the cart</button>
     </div>
 
 </div>
