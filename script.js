@@ -1,8 +1,9 @@
 const parentContainer = document.getElementById("full-container");
 const musicContainer = document.querySelector('.music');
 const cartItems = document.getElementById('cart-items');
+const pageContainer = document.getElementById('page-buttons');
+const limit = 2;
 
-var cartItemsList = [];
 // parentContainer.addEventListener('click', (e)=>{
 //     if(e.target.className=='add-cart-btn'){
 //         const id= e.target.parentNode.parentNode.id;
@@ -86,10 +87,25 @@ var cartItemsList = [];
 // })
 
 window.addEventListener('DOMContentLoaded',()=>{
-    axios.get('http://localhost:3000/products').then((response)=>{
+    getproducts(1);
+    postcart(); 
+    
+    })
+    
+function getproducts(pgNum){
+    musicContainer.innerHTML="";
+    pageContainer.innerHTML="";
+    axios.get(`http://localhost:3000?page=${pgNum}`).then((response)=>{
         // console.log(response.data.products);
         
         let products = response.data.products;
+        let currentPage = response.data.currentPage;
+        let hasNextPage = response.data.hasNextPage;
+        let hasPreviousPage = response.data.hasPreviousPage;
+        let nextPage = response.data.nextPage;
+        let previousPage = response.data.previousPage;
+        // console.log(currentPage,hasNextPage,hasPreviousPage,nextPage,previousPage); 
+        
         products.forEach(product => {
             const id = product.id;
             const title = product.title;
@@ -112,12 +128,30 @@ window.addEventListener('DOMContentLoaded',()=>{
             `
             musicContainer.appendChild(productItem);
         });
-    })
-    
-    
-    })
-    
+            pageBtn = document.createElement('div');
+            pageBtn.classList.add('page-btn');
+            if ((hasPreviousPage) && (hasNextPage)) {
+                pageBtn.innerHTML = `
+                <button class='pg-btn-small' onclick="getproducts(${previousPage})">${previousPage}</button>
+                <button class='pg-btn-big'onclick="getproducts(${currentPage})">${currentPage}</button>
+                <button class='pg-btn-small'onclick="getproducts(${nextPage})">${nextPage}</button> 
+                `;
+            } else if ((hasPreviousPage) && (!hasNextPage)){
+                pageBtn.innerHTML = `
+                <button class='pg-btn-small' onclick="getproducts(${previousPage})">${previousPage}</button>
+                <button class='pg-btn-big'onclick="getproducts(${currentPage})">${currentPage}</button>
+                `;
 
+            } else if ((!hasPreviousPage) && (hasNextPage)) {
+                pageBtn.innerHTML = `
+                <button class='pg-btn-big' onclick="getproducts(${currentPage})">${currentPage}</button>
+                <button class='pg-btn-small'onclick="getproducts(${nextPage})">${nextPage}</button> 
+                `;
+            }
+            pageContainer.appendChild(pageBtn);       
+
+    })
+}
 
 function addToCart(id) {
 
@@ -125,7 +159,7 @@ function addToCart(id) {
     .then(response =>{
         if(response.status === 200){
         notifyUser(response.data.message);
-        showcart();
+        postcart();
         // console.log(response.data.item);    
         } else {throw new Error(response.data.message)};
         }).catch(errmsg=>{
@@ -147,7 +181,7 @@ function notifyUser(message) {
             },2500)
 }
 
-function showcart(){
+function postcart(){
     axios.get('http://localhost:3000/cart').then(response=>{
         let products = response.data.products;
         cartItems.innerHTML="";
@@ -174,7 +208,7 @@ function showcart(){
             <span>$</span><span class="item-price">
             ${price}</span>
             <span class="item-quantity">${quantity}</span>
-            <button id="remove" class="remove-btn">REMOVE</button>
+            <button id="remove" onclick = "deleteItem(${id})"class="remove-btn">REMOVE</button>
             `;
             cartItems.appendChild(cartItem);
  
@@ -182,9 +216,21 @@ function showcart(){
       
     document.querySelector(".no-of-items").innerText = products.length;
 })
-document.querySelector('.cart-container').style = "display:flex; transform: translateX(-100%);" ;
+
 }
 
 function closecart(){
     document.querySelector('.cart-container').style = "display:flex; transform: translateX(0);"
+}
+
+function showcart(){
+    document.querySelector('.cart-container').style = "display:flex; transform: translateX(-100%);" ;
+}
+
+function deleteItem(id){
+    axios.post('http://localhost:3000/cart-delete-item', {productId : id})
+    .then (response=>{
+        postcart();
+    })
+
 }
