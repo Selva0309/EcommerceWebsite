@@ -2,6 +2,7 @@ const parentContainer = document.getElementById("full-container");
 const musicContainer = document.querySelector('.music');
 const cartItems = document.getElementById('cart-items');
 const pageContainer = document.getElementById('page-buttons');
+const cartPagination = document.getElementById('cart-pagination');
 const limit = 2;
 
 // parentContainer.addEventListener('click', (e)=>{
@@ -88,7 +89,7 @@ const limit = 2;
 
 window.addEventListener('DOMContentLoaded',()=>{
     getproducts(1);
-    postcart(); 
+    postcart(1); 
     
     })
     
@@ -159,7 +160,7 @@ function addToCart(id) {
     .then(response =>{
         if(response.status === 200){
         notifyUser(response.data.message);
-        postcart();
+        postcart(1);
         // console.log(response.data.item);    
         } else {throw new Error(response.data.message)};
         }).catch(errmsg=>{
@@ -181,24 +182,42 @@ function notifyUser(message) {
             },2500)
 }
 
-function postcart(){
+function postcart(pgNum){
     axios.get('http://localhost:3000/cart').then(response=>{
         let products = response.data.products;
         cartItems.innerHTML="";
+        cartPagination.innerHTML="";
         document.querySelector('.total-amount').innerText = 0;                                                                                                                                                                                                              
         console.log(products)
+        let totalitems = products.length;
+        document.querySelector(".no-of-items").innerText = totalitems;
         products.forEach(product=>{
-        const id = product.id;
-        const title = product.title;
-        const price = product.price;
-        const img_link = product.imageUrl;
-        const quantity = product.cartItem.quantity;
+            const price = product.price;
+            const quantity = product.cartItem.quantity;    
+
         total_price = document.querySelector('.total-amount').innerText;
-        cartItem = document.createElement('div');
-        cartItem.classList.add("cart-item-row");
+        document.querySelector('.total-amount').innerText = (parseFloat(total_price)+(price*quantity)).toFixed(2);
+        })
+        
+            page = pgNum;
+            offset=((page-1)*limit);
+            currentPage =  page;
+            nextPage= page + 1;
+            previousPage = page - 1;
+            hasNextPage =  (limit * page)<totalitems;
+            hasPreviousPage= (page > 1);
+            
+            
+            
+            for (let i=offset; (i<=(offset+1)&& i<totalitems); i++){
+            const id = products[i].id;
+            const title = products[i].title;
+            const price = products[i].price;
+            const img_link = products[i].imageUrl;
+            const quantity = products[i].cartItem.quantity;
+            cartItem = document.createElement('div');
+            cartItem.classList.add("cart-item-row");
             cartItem.setAttribute('id',`in-cart-${id}`);
-            document.querySelector('.total-amount').innerText = (parseFloat(total_price)+(price*quantity)).toFixed(2);
-    
             cartItem.innerHTML= `
             <div class="image-icon">
                 <img src="${img_link}">
@@ -211,10 +230,29 @@ function postcart(){
             <button id="remove" onclick = "deleteItem(${id})"class="remove-btn">REMOVE</button>
             `;
             cartItems.appendChild(cartItem);
- 
-    })
-      
-    document.querySelector(".no-of-items").innerText = products.length;
+        }    
+            cartBtn = document.createElement('div');
+            cartBtn.classList.add('page-btn');
+            if ((hasPreviousPage) && (hasNextPage)) {
+                cartBtn.innerHTML = `
+                <button class='pg-btn-small' onclick='postcart(${previousPage})'>${previousPage}</button>
+                <button class='pg-btn-big' onclick='postcart(${currentPage})'>${currentPage}</button>
+                <button class='pg-btn-small' onclick='postcart(${nextPage})'>${nextPage}</button> 
+                `;
+            } else if ((hasPreviousPage) && (!hasNextPage)){
+                cartBtn.innerHTML = `
+                <button class='pg-btn-small' onclick='postcart(${previousPage})'>${previousPage}</button>
+                <button class='pg-btn-big' onclick='postcart(${currentPage})' &>${currentPage}</button>
+                `;
+
+            } else if ((!hasPreviousPage) && (hasNextPage)) {
+                cartBtn.innerHTML = `
+                <button class='pg-btn-big'onclick='postcart(${currentPage})'>${currentPage}</button>
+                <button class='pg-btn-small'onclick='postcart(${nextPage})'>${nextPage}</button> 
+                `;
+            }
+            cartPagination.appendChild(cartBtn);
+              
 })
 
 }
@@ -233,4 +271,14 @@ function deleteItem(id){
         postcart();
     })
 
+}
+
+function cartpagination(page) {
+        
+          
+}
+
+function showcartitem(pageNum,totalitems,products) {
+                      
+    
 }
