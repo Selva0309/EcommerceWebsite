@@ -3,8 +3,10 @@ const musicContainer = document.querySelector('.music');
 const cartItems = document.getElementById('cart-items');
 const pageContainer = document.getElementById('page-buttons');
 const cartPagination = document.getElementById('cart-pagination');
-const limit = 2;
 
+const limit = 2;
+const orderContainer = document.getElementById('OrderItems');
+console.log(orderContainer)
 // parentContainer.addEventListener('click', (e)=>{
 //     if(e.target.className=='add-cart-btn'){
 //         const id= e.target.parentNode.parentNode.id;
@@ -155,11 +157,16 @@ function getproducts(pgNum){
 }
 
 function addToCart(id) {
-
+    
     axios.post('http://localhost:3000/cart', {productId: id})
     .then(response =>{
         if(response.status === 200){
-        notifyUser(response.data.message);
+
+        successmsg = response.data.message;
+        message = `Your Product ${successmsg}`;
+        result = response.data.result;
+        // console.log(result)
+        notifyUser(message);
         postcart(1);
         // console.log(response.data.item);    
         } else {throw new Error(response.data.message)};
@@ -188,7 +195,7 @@ function postcart(pgNum){
         cartItems.innerHTML="";
         cartPagination.innerHTML="";
         document.querySelector('.total-amount').innerText = 0;                                                                                                                                                                                                              
-        console.log(products)
+        // console.log(products)
         let totalitems = products.length;
         document.querySelector(".no-of-items").innerText = totalitems;
         products.forEach(product=>{
@@ -276,11 +283,59 @@ function deleteItem(id){
 function createOrder(){
     axios.post('http://localhost:3000/create-order').then(response =>{
         if(response.status === 200){
-            notifyUser(response.data.message);
+            result = response.data.result;
+            orderId = result[0].orderId;
+            message = `${response.data.message} <h3>${orderId}</h3>`
+            notifyUser(message);
             postcart(1);
             // console.log(response.data.item);    
             } else {throw new Error(response.data.message)};
             }).catch(errmsg=>{
             notifyUser(errmsg);  
     })
+}
+
+function showOrders(){
+    document.querySelector('.order-container').style = "display:flex; transform: translateX(100%);" ;
+    orderContainer.innerHTML='';
+    axios.get('http://localhost:3000/orders')
+        .then(response=>{
+          const orders = response.data.orders;
+          console.log(orderContainer);
+          orders.forEach(order=>{
+            itemContainer = document.createElement('section');
+            itemContainer.classList.add('order-items-container');
+            const orderId = order.id;
+            console.log(orderId);
+            const orderedProducts = order.products;
+            orderheader = document.createElement('div');
+            orderheader.innerHTML=`<div class='orderNo'><h2>Order#${orderId}</h2></div>`;
+            
+            itemContainer.appendChild(orderheader);
+            
+            orderedProducts.forEach(product=>{
+                const title = product.title;
+                const quantity = product.orderItem.quantity;
+                
+
+                orderItem = document.createElement('div');
+                orderItem.classList.add("order-item-row");
+                orderItem.setAttribute('id',`${orderId}`);
+                orderItem.innerHTML= `                
+                <div class="items">                    
+                    <span class="item-name"><h3>${title}</h3></span>
+                    <span class="item-quantity">${quantity}</span>                                       
+                </div>                
+                `            
+                itemContainer.appendChild(orderItem) 
+
+            })
+            orderContainer.appendChild(itemContainer); 
+          })
+               
+        })
+}
+
+function closeorder(){
+    document.querySelector('.order-container').style = "display:flex; transform: translateX(-100%);"
 }
