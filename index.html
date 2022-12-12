@@ -14,7 +14,8 @@
     <div class="navbar">
         <ul class="headeritems">
             <li><a href="/home.html">Home</a></li>
-            <li><a href="#">Store</a></li>
+            <li><a href="/index.html">Store</a></li>
+            <li><a href="#" onclick="showOrders()">Your Orders</a></li>
             <li><a href="/about-us.html">About us</a></li>
             <a href="#" id="cart"class="btn"type="button" onclick="showcart()">Cart<span class="no-of-items">0</span></a>
         </ul>
@@ -114,6 +115,29 @@
         </div>
         <button class="btn" id="purchase" onclick="createOrder()">Order Now</button>
         <span class="total">TOTAL<span>$<span class="total-amount">0</span></span></span>
+    </section>
+
+    <section class="order-container">
+        <button onclick='closeorder()' class="close">X</button>
+        <h1>Orders</h1>
+        <div class="order-items-header">
+            <span class="order-no">ORDER#</span>
+            <span class="ordered-product">PRODUCT</span>
+            <span class="item-quantiy">QUANTIY</span>
+        </div>
+        <div class="order-details-container" id="OrderItems">
+            <h3>No items found</h3>
+          <div class="order-items-container" >
+            
+            
+          </div>
+
+        </div>
+        
+        
+
+       
+        
     </section>
     <section class="notification-container">
 
