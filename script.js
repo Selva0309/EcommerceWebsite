@@ -268,17 +268,19 @@ function showcart(){
 function deleteItem(id){
     axios.post('http://localhost:3000/cart-delete-item', {productId : id})
     .then (response=>{
-        postcart();
+        postcart(1);
     })
 
 }
 
-function cartpagination(page) {
-        
-          
-}
-
-function showcartitem(pageNum,totalitems,products) {
-                      
-    
+function createOrder(){
+    axios.post('http://localhost:3000/create-order').then(response =>{
+        if(response.status === 200){
+            notifyUser(response.data.message);
+            postcart(1);
+            // console.log(response.data.item);    
+            } else {throw new Error(response.data.message)};
+            }).catch(errmsg=>{
+            notifyUser(errmsg);  
+    })
 }
